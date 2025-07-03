@@ -144,19 +144,61 @@
     background-color: #d96610;
   }
 
-  #result {
+  #result, #qualify {
     font-weight: 700;
-    color: red;
     font-size: 22px;
     margin-top: 30px;
+  }
+
+  #result {
+    color: red;
+  }
+
+  #qualify {
+    color: green;
+  }
+
+  #last-step {
+    font-size: 18px;
+    margin: 10px 0 20px;
+  }
+
+  #last-step b {
+    font-weight: 700;
+  }
+
+  .continue-button {
+    background-color: #f47b20;
+    color: #fff;
+    border: none;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 100%;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s;
+  }
+
+  .continue-button:hover {
+    background-color: #d96610;
+  }
+
+  #countdown-message {
+    color: red;
+    font-size: 16px;
+    margin-top: 15px;
   }
 </style>
 
 <div id="quiz">
   <div id="q1">
-    <h2>What is your age range?</h2>
-    <button class="quiz-button" onclick="handleAge()">40 to 79</button>
-    <button class="quiz-button" onclick="handleAge()">80 and older</button>
+    <h2>Are you over 45 years old?</h2>
+    <button class="quiz-button" onclick="handleAge('yes')">Yes</button>
+    <button class="quiz-button" onclick="handleAge('no')">No</button>
   </div>
 
   <div id="q2" style="display: none;">
@@ -169,23 +211,60 @@
   <div id="result" style="display: none;">
     Sorry, you don't qualify.
   </div>
+
+  <div id="qualify" style="display: none;">
+    <div>Congratulations, you qualify!</div>
+    <div id="last-step"><b>Last step:</b> Click to continue</div>
+    <a class="continue-button" href="https://www.google.com">Continue</a>
+    <div id="countdown-message">
+      Your spot is secured! Please click now to proceed. <span id="timer">1:45</span>
+    </div>
+  </div>
 </div>
 
 <script>
-  function handleAge() {
-    document.getElementById("q1").style.display = "none";
-    document.getElementById("q2").style.display = "block";
+  // Start countdown on page load
+  let timeLeft = 105; // 1:45 in seconds
+
+  function startCountdown() {
+    const timerElement = document.getElementById("timer");
+    const interval = setInterval(() => {
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        timerElement.textContent = "0:00";
+        return;
+      }
+
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerElement.textContent = `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+      timeLeft--;
+    }, 1000);
+  }
+
+  // Trigger countdown when page loads
+  window.onload = startCountdown;
+
+  function handleAge(answer) {
+    if (answer === 'yes') {
+      document.getElementById("q1").style.display = "none";
+      document.getElementById("q2").style.display = "block";
+    } else {
+      document.getElementById("q1").style.display = "none";
+      document.getElementById("result").style.display = "block";
+    }
   }
 
   function handleCondition(answer) {
     document.getElementById("q2").style.display = "none";
     if (answer === "yes") {
-      window.location.href = "https://www.google.com";
+      document.getElementById("qualify").style.display = "block";
     } else {
       document.getElementById("result").style.display = "block";
     }
   }
 </script>
+
 
 
 
