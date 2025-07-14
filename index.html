@@ -230,14 +230,22 @@
 <div id="quiz">
   <div id="q1">
     <h2>Are you over 45 years old?</h2>
-    <button class="quiz-button" onclick="handleAge('yes')">Yes</button>
-    <button class="quiz-button" onclick="handleAge('no')">No</button>
+    <button class="quiz-button" onclick="handleAnswer('yes')">Yes</button>
+    <button class="quiz-button" onclick="handleAnswer('no')">No</button>
   </div>
 
+  <div id="loading" style="display: none;">
+    <div id="loading-text">Reviewing your answer...</div>
+    <div class="spinner"></div>
+  </div>
+
+  <div id="result" style="display: none;">
+    Sorry, you don't qualify.
+  </div>
 
   <div id="qualify" style="display: none;">
     <div>Congratulations, you qualify!🎉</div>
-   <br>
+    <br>
     <p><span class="subtext"><strong>Last Step:</strong> Click below to continue.</span></p>
     <a class="continue-button" href="https://fb.track-conv.shop/click">Continue</a>
     <div id="countdown-message">
@@ -266,29 +274,19 @@
     }, 1000);
   }
 
-  window.onload = startCountdown;
+  function handleAnswer(answer) {
+    document.getElementById("q1").style.display = "none";
 
-  function handleAge(answer) {
-    if (answer === 'yes') {
-      document.getElementById("q1").style.display = "none";
-      document.getElementById("q2").style.display = "block";
-    } else {
-      document.getElementById("q1").style.display = "none";
+    if (answer === "no") {
       document.getElementById("result").style.display = "block";
-    }
-  }
-
-  function handleCondition(answer) {
-    document.getElementById("q2").style.display = "none";
-    if (answer === "yes") {
+    } else {
       document.getElementById("loading").style.display = "block";
 
       setTimeout(() => {
         document.getElementById("loading").style.display = "none";
         document.getElementById("qualify").style.display = "block";
+        startCountdown();
       }, 2000);
-    } else {
-      document.getElementById("result").style.display = "block";
     }
   }
 </script>
